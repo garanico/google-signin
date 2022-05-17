@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { StatusBar } from 'expo-status-bar';
@@ -9,13 +9,19 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
   const [request, response, promptAsync] = Google.useAuthRequest({
-    webClientId: '411358480055-oqeog86nbu3kru15t7bjrqkge31cqksj.apps.googleusercontent.com',
+    webClientId: '418951792967-ifbmpnb1f4enacn6ou022ohu949t4f1f.apps.googleusercontent.com',
+    expoClientId: '418951792967-6uhs2ackdacf65g8kra86c3jhmeojrf7.apps.googleusercontent.com',
+    androidClientId: '418951792967-ifbmpnb1f4enacn6ou022ohu949t4f1f.apps.googleusercontent.com',
+    iosClientId: '418951792967-ifbmpnb1f4enacn6ou022ohu949t4f1f.apps.googleusercontent.com',
   });
+
+  const [loggedIn, setLoggedIn] = useState("");
 
   useEffect (
     () => {
       if(response?.type==='success'){
-        const { authenication } = response;
+        const { authentication, type } = response;
+        setLoggedIn(type);
       }
     }, [response]
   )
@@ -29,6 +35,7 @@ export default function App() {
           promptAsync();
         }} 
       />
+      <Text>{loggedIn === "success" ? "Logged In" : "Logged Out"}</Text>
     </View>
   );
 }
